@@ -1,0 +1,163 @@
+* 상속 
+* 생성자 
+* 다형성 , instanceof 연산자
+* overload, override
+* 추상메서드, 추상 클래스
+* final keyword
+============================================================================
+
+* 상속 
+-> 기존 클래스에 새로운 기능이나 속성을 추가하여 새로운 클래스로 만드는 것을 의미
+-> 즉, 부모클래스를 만들고 그 부모클래스에 있는 속성과 기능을 자식클래스가 상속받아 새로운 기능과 속성을 추가하는 것
+
+-> 만약 Person 이라는 클래스가 있고 속성에는 일반적으로 사람이 가지고 있는 속성(name:이름, height:키, weight:몸무게)등이 있고 
+-> 사람의 전체 정보를 출력하는 show() 메서드가 있다고 가정하자
+-> 여기서 속성은 클래스의 멤버변수, 인스턴스 변수이며 각각 변수(name,height,weight)는 클래스와 has a 관계가 성립되는 것들을 작성을 해야한다.
+-> 그 다음 Person 클래스를 상속받는 Student라는 새로운 클래스를 만들어주며 이 때 주의할점은 두 클래스의 관계가 is a 관계가 성립할 때 관계를 맺을 수 있다.
+-> Student is a Person (학생은 사람이다), 또한 상속을 받는 클래스는 ★extends 란 키워드를 사용해 상속 받는 클래스라고 명시해주며 자바는 
+-> 단일 상속만 허용한다.
+
+-> class Person {                              
+       private String name;
+       private double height, weight;
+       
+       name setter/getter
+       height,weight setter/getter
+       public void show(){
+           System.out.println("이름" + name);
+           System.out.println("키" + height);
+           System.out.println("몸무게" + weight);
+       }
+  }
+  -> class Student extends Person {
+        * 사람이 가지고 있는 속성을 상속받아 (name, height, weight) 속성을 가지고 있고 더해서 학생만이 가지고 있는 속성을 가지고 있다.
+        private String studentID //학번 
+        private int grade //학년
+        private double GPA // 학점
+        
+        public Student () {} --> default 생성자 : 프로그램 실행지 컴파일러(JVM)가 자동으로 생성해준다.
+        
+        
+        @Override --> ** Person 클래스에 있는 show 메서드를 student클래스에서 새롭게 정의하여 즉 재정의 하여 사용한다 
+        public void show(){
+           System.out.println("이름" + getName); --> 부모클래스 Person클래스가 가지고 있는 속성을 상속받았기에 가져다 사용할 수 있다.
+           System.out.println("키" + getHeight); --> 하지만 접근제한자 private가 적용이 되어 있어 상속 받았다 하더라고 직접 가져다 쓸 수 없으며
+           System.out.println("몸무게" + getWeight); --> getter함수를 통해 가져다 사용한다.
+           System.out.println("학번" + studentID);
+           System.out.println("학년" + grade);
+           System.out.println("학점" + GPA);
+           => show() 메서드를 오버라이드 했기 때문에 이미 이름, 키, 몸무게 출력은 person이라는 클래스에서 출력해주고 있기 때문에 
+           => 다시 써줄 필요없이 부모클래스 즉 person 클래스의 show() 메서드를 재사용하고 나머지 학생 정보를 출력하여 코드를 줄일수 있다.
+           => public void show(){
+                super.show();  --> 부모클래스에 있는 속성, 기능을 가져다 쓰려면 super 라는 키워드를 사용해 접근하여 사용한다.
+                System.out.println("학번" + studentID);
+                System.out.println("학년" + grade);
+                System.out.println("학점" + GPA);
+            }
+        }
+    }
+    * 생성자, 생성자 overloading
+    -> 생성자의 역활은 클래스의 멤버변수 즉 인스턴스 변수를 초기화를 시켜준다.
+    -> 위에서 말했듯이 사용자 즉 개발자가 생성자를 따로 구현하지 않아도 컴파일러가 default 생성자를 내부적으로 만들어 제공해준다.
+    -> ※ 하지만 사용자가 생성자를 단 하나라도 구현을 했다면 컴파일러가 제공하는 기본 생성자는 사라진다.
+    -> 또한 생성자 overloading을 통해 생성자를 다양하게 구현해 다양한 초기값을 부여 할 수 있다.
+    -> 여기서 overloading 이란 ? 
+    -> ▶ 자기 클래스 내에서 메서드를 다양하게 여러개 정의하는 것
+    -> ▶ 메서드이름이 같아야 한다.
+    -> ▶ 메서드의 매개변수는 갯수가 다르거나 자료형이 다르거나 순서가 달라야한다.
+    -> ▶ 반환타입은 같아도 되고 달라도 된다.
+    
+    -> 예) 위에 student 클래스의 생성자를 활용
+           -> public Student (){ => default 생성자
+                  this("12-123141", 2, 4.5) => 아래에 있는 생성자 public Student (String studentID, int grade, double GPA) 를 초기화
+                  => 여기서 생성자 안에서 this()함수는 자기 자신의 생성자를 호출하는 함수이다.
+                  => 클래스 안에는 overloading을 통해 만들어진 여러개 생성자메서드가 존재할 수 있으며, 기능이 유사할 때에는 
+                  => this() 함수를 이용하여 자기 자신의 다른 생성자를 호출 할 수 있다.
+                  => 만약 호출을 했다고 하면 그 생성자 메서드가 매개변수를 2개나 3개를 가지고 있다면
+                  => 매개변수에 개수에 맞게 this()함수를 작성해야한다.
+                  ※ 주의 할점 : 생성자에서만 호출이 가능하며 , this(), super()를 같이 사용할 수 없다.
+                     또한 this()를 호출 할 때에는 반드시 생성자의 첫번 째 문장이어야한다.
+              } 
+              
+           -> public Student (String name, double height, double weight){
+                    super(name, height, weight)
+              } => 메서드 이름이 같고 매개변수 개수가 다른 생성자 overloading
+           -> public Student (String studentID, int grade, double GPA){
+                     this.studentID = studentID;
+                     this.grade = grade;
+                     this.GPA = GPA;
+              } => 메서드 오버로딩 개수는 같으나 자료형이 다르다
+          
+      ※ this 의 사용
+        1) this.변수 : 자기 클래스의 멤버변수(인스턴스변수)를 접근할 때 사용
+        2) this.메서드 : 자기 클래스의 멤버메서드를 접근 할때 사용
+        3) this() : 자기 자신의 생성자를 호출할때 사용
+        * this라는 키워드는 static 메서드 안에서는 사용할 수 없다. 예) main 메서드 
+        
+      ※ super 키워드 사용
+        1) super.변수 : 부모클래스로 부터 물려받은 변수 
+           -> 하지만 부모클래스에 멤벼변수가 private로 접근제한자가 걸려 있다면 setter/getter 함수를 통해 사용해야한다.
+        2) super.메서드 : 부모클래스로 부터 물려받은 메서드
+        3) super() : 부모클래스의 생성자
+          -> super() 역시 생성자 안에서만 호출이 가능하며 생성자의 맨 첫줄에 위치해야한다.
+          -> super()는 부모클래스에 생성자가 오버로딩된 형태로 여러개가 존재한다면 그 중 어떤 생성자를 호출할지 결정할 수 있다.
+          -> 하지만 super()생성자를 사용자가 명시적으로 호출하지 않는다면 컴파일러는 자식클래스 생성자에서 super()의 default 생성자를 자동 호출한다.
+  
+     * 다형성 Polymorphism 
+      -> 여러가지 형태를 가질 수 있는 성질을 의미
+      -> 한 타입의 참조변수로 여러 타입의 객체를 참조할수 있도록 함으로 다형성을 프로그램적으로 구현해놓은 특징
+      -> 다형성을 위에서 말한 오버로딩과 오버라이딩이 예로 들 수 있다.
+      -> 여기서 overriding 이란 ? 
+      ※ 오버라이딩 (Overriding) : 상속이라는 개념에서 사용하며 부모클래스로부터 상속받은 메서드를 재정의해 사용하는것 즉 덮어쓴다!
+         !!주의할점 1) 오버라이드 하려는 메서드가 부모클래스에 존재해야한다.
+                   2) 메서드 이름이 동일해야한다.
+                   3) 메서드의 매개변수의 갯수, 데이터 타입, 반환타입이 같아야한다.
+                   4) 메서드의 접근지정자는 부모클래스와 동일하거나 접근범위가 넓어야 한다.
+                   => 접근제한자 범위 
+                   => private < default (생략형) < protected < public 순
+                   => 만약 부모클래스의 메서드가 public으로 되어 있다면 자식클래스의 오버라이드된
+                   => 메서드의 접근지정자는 public으로 동일해야하고 만약 생략형과 protected를 적용한다면 컴파일오류가 난다!!
+                   
+       ※  부모타입 변수 선언 = new 자식객체생성() 
+          -> 부모 자식간 상속관계에서만 가능하다.
+          -> 부모타입으로 변수를 생성하고 자식의 객체를 생성할 경우 접근 할 수 있는 변수나 메서드의 제한이 있다.
+          -> 1_ 부모로부터 상속받은 변수나 메서드는 접근가능하다.
+          -> 2_ 하지만 자식이 가지고 있는 고유한 변수나 메서드는 접근이 불가하다.!!
+          -> 3_ 그러나 자식클래스에서 오버라이딩 된 메서드는 접근이 가능하며 호출되면 오버라이딩 된 메서드가 자동호출된다.
+          -> 4_ 부모,자식의 상속관계일 경우 형 변환이 가능!!
+          
+          예 ) Person person = new Student();
+             부모타입  변수   =   자식 객체생성()
+            ※ 만약 자식 객체의 고유한 변수를 접근해 출력하고 싶다면 ? 
+              => 바로 person.grade 이렇게 접근할 수 없으며 
+              => 자식타입으로 형변환(다운캐스팅) 해 접근해야한다.
+              => ((Student)person).grade; 
+              => [여기서 ((Student)person) 괄호로 묶어준 이유는 연산자 우선순위 떄문에 . 연산자가 먼저 실행되어 person.grade가 실행되기 때문]
+  
+       ※ instanceof 연산자
+          -> 사용형식 : 참조변수 instanceof 클래스명 
+          -> 참조변수가 오른쪽 클래스의 객체인지 여부를 묻는 연산자
+          -> 클래스의 객체이면 true를 반환 / 객체가 아니면 false를 반환
+          
+          예) if(person instanceof Student) => * true
+          
+    * 추상클래스, 추상메서드 
+     => 추상클래스 : 한개 이상의 추상메서드를 가지는 클래스, 클래스 앞에 abstract 키워드를 붙여 추상클래스라는 것을 의미
+                    추상클래스는 일반 클래스 처럼 멤버변수, 클래스 변수, 멤버메서드를 포함 시킬 수 있다.
+                    목적 : 상속받게할 목적이며, 추상메서드를 의무적으로 오버라이딩 해야한다.
+                           그렇지 않으면 자식클래스도 추상클래스가 되어야한다.
+     => 추상메서드 : 메서드의 몸체 즉 body({ })가 없이 정의 한 메서드, 메서드 앞에 abstract란 modifier를 붙여준다.
+         예 ) abstract public void test();
+  
+      ※ 추상클래스는 타입선언은 할 수 있으나 new 를 통해 객체생성은 할 수 없다. 반드시 상속을 통해서만 완성되며
+         상속을 받고 부모클래스의 추상메서드를 오버라이딩을 한 자식클래스로는 객체 생성이 가능하다!
+  
+  * final modifier
+    => final 식별자는 abstract와 반대되는 개념
+    => 클래스 : final class 상속 불가능 (String 클래스) <=> abstract 클래스 상속 가능
+    => 메서드 : final method 오버라이딩 불가능 < = > abstract method 오버라이딩 시키려는 목적
+    => 변수 : final 변수 는 상수라고도 하며 한번 값을 할당하고 선언이 되면 다시 값을 할당하지 못한다, final public static을 함께 쓴다.
+  
+  
+  
+  
