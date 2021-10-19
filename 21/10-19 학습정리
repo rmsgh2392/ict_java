@@ -1,0 +1,114 @@
+* Interface
+* Exception 
+* javax.swing
+=======================================
+
+* Interface 인터페이스란 ? 
+  1) 여러 객체들을 구성할 때 객체들 간의 공통적인 부분(*기능, 동작)들을 추상화(추출) 하여 명시하고 기능과 동작들의 규격(규칙)을 정리한 설계도이다.
+  2) 객체지향 부분 중 다형성을 극대화 하기 위해 사용
+  3) 인터페이스는 interface 라는 keyword를 사용해 정의한다 예) public interface Inter{} // 접근제한자로 public , default를 쓸 수 있다.
+  4) 인터페이스의 변수는 [ public static final ] 이 생략된 상수 선언과 [ abstract ] 생략된 추상메서드만 선언만 포함할 수 있다.
+  ※ 인터페이스도 class, enum, annotaion 처럼 .java파일로 작성되고, 컴파일러를 통해 .class파일로 컴파일 된다.
+  ※ 인터페이스도 접근지정자로 public으로 하면 어디서든 사용가능하며 public을 생략하면 같은 패키지내에서만 사용가능하다.
+  ★ 인터페이스는 참조타입 변수로 타입선언은 할 수 있지만 객체 생성은 할 수 없다(생성자도 x) !!
+  ※ interface는 상수 필드, 추상 메서드, 디폴트 메서드, 정적 메서드를 구성 멤버로 가집니다.
+
+    => 예) public interface Inter{
+            [public static final] int number; 
+            [abstract public]     void run();
+        }
+    => 이렇게 인터페이스 내부에서는 구현되는 코드는 없다.
+    => 하지만 자바 8버전 이후부터 default, static 메서드가 인터페이스에 추가되었다.
+    => default 메서드는 인터페이스 내부에서 구현될 수 있으며, 선택적으로 오버라이딩을 할수 있고 default 키워드는 반드시 명시해야한다.
+       예) public interface Phone{
+                int VERSION = 12;
+                String getManfacture();
+                String getOS();
+                
+                * default void printRing(){
+                    System.out.println("Sound : Ring Ring~~");
+                }
+            }
+     => 또한 default 메서드와 마찬가지로 static method도 추가되었으며, 인스턴스 생성 없이 인터페이스이름으로 직접 메서드를 호출할 수 있다.
+     => static method는 인터페이스를 구현하는 클래스에서 재정의 즉 오버라이딩을 할수 없다.
+        예) public interface Phone {
+                  int VERSION = 12;
+                  String getManfacture();
+                  String getOS();
+                  
+                  default void printRing(){
+                      printInfo();
+                      System.out.println("Sound : Ring Ring~~");
+                  }
+                  static void printUser(){                   => static 메서드 호출 : Phone.printUser();
+                       // static private 메소드 사용
+                      getUser(user); // static 메서드는 static 메서드 안에서만 호출 가능하다 !!
+                      System.out.println("User : "+user);                 
+                  }
+                  * private void printInfo(){
+                     System.out.println("Print Information");
+                  }
+
+                  * private static void getUser(String user){
+                      System.out.println("User : "+user);
+                  }
+                 
+            }
+       => 위에서 말했듯이 자바 8 이후부터 인터페이스 내부에서 코드를 구현하는 것이 추가되었고 
+       => 코드 구현시, 복잡한 코드를 한번에 구현하는 것보다는 작은 메서드를 작성하여 복잡한 메서드를 구현하는것이 재사용, 유지보수 측면에서 효율적이다.
+       => default, static메서드와 마찬가지로 private 메서드도 인터페이스에서 구현할 수 있으며 
+       => private 메서드를 이용하여 작은 메서드를 구현하되 외부에서 볼수 없고 사용할수 없도록 하는 메서드
+       
+     5) 인터페이스의 구현은 implements 키워드를 통해 특정된 기능을 규약해 놓은 인터페이스를 구현 할 필요가 있는 클래스에서 구현한다.
+        예 ) public class Iphone implements Phone{
+                @Override
+                publid void String getManfacture(){
+                    return Apple;
+                };
+                @Override
+                public void String getOS(){
+                    return MacOs;
+                };
+                @Override
+                public void printRing() {  ==> Phone 인터페이스에서 default로 만든 메서드를 iphone 클래스에서 재정의!!
+                    System.out.println("Sound : Ring~~~~~~~");
+                }
+        
+          }
+     
+     6) 자바에선 클래스는 단일 상속만이 원칙이다. 하지만 인터페이스는 다중 상속이 가능하다.
+       => 여러 인터페이스를 상속 받아 하나의 인터페이스로 만들 수 있다.
+       => 다중상속이 된 인터페이스를 구현하는 클래스는 모든 추상메서드를 오버라이딩 해야한다 !!
+       => 인터페이스 상속도 extends 키워드를 사용하여 상속한다.
+ 
+          public interface Phone {
+              int version = 12;
+
+              String getManufacturer();
+              String getOS();
+          }
+          public interface Watch{
+              String getAppearance();
+          }
+          public interface Device extends Phone, Watch{
+              void run();
+          }
+          public class Machine implements Device{
+                @Override
+                String getManufacturer(){}
+                
+                @Override
+                String getOS(){}
+                
+                @Override
+                String getAppearance(){};
+                
+                @Override
+                 void run(){};
+          
+          }
+ 
+ 
+ 
+ 
+ 
