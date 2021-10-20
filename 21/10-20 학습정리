@@ -1,0 +1,114 @@
+* Exception 예외처리 선언 방법
+ -> throws 절을 이용하여 선언한다.
+ -> 즉 개발자가 직접 예외처리를 하지 않고 메소드를 호출하는 쪽으로 넘긴다.
+ -> 단위테스트 시 많이 사용하며 throws와 throw는 반드시 세트 같이 사용한다.
+ 예) public void sub() throws IOException 
+     {
+        int r = System.in.read();
+     } --> sub()메소드를 호출하는 곳에 IOException 예외를 넘겨준다.
+  ※ RuntimeException 클래스 계열의 예외들은 throws를 안해줘도 예외처리를 하지 않아도 JVM이 알아서 
+     throws 예외처리를 해주므로 생략해도 되지만 IOException등과 같은 컴파일 계열의 예외처리들은 
+     반드시 명시적으로 처리를 해주어야한다.
+  IOException
+    +-----FileNotFoundException   -> 발생되는 예외를 throws절로 선언해서 처리
+    
+ * 사용자 정의 예외 클래스 만들기
+   -> 즉, 개발자가 직접 예외처리를 하는 클래스를 만드는 것이다.
+   1) 예외처리 클래스이기 때문에 가장 상위 클래스인 Exception 클래스를 상속받는다.
+   2) 생성자를 구성한 뒤 생성자 안에서 super("예외 메시지") 를 명시적으로 호출한다.
+   => 이렇게 해서 만든 사용자 정의 예외 클래스를 사용하려면  ? 
+      1) 예외 객체를 생성할 때는 throw와 함께 사용한다.
+      2) 메서드 헤더부분에 throws로 해당 예외를 선언하다.
+      
+   ㅇㅖ) public class ThrowsTest {
+          public static void reading(String fileName) 
+            throws FileNotFoundException, IOException
+          {
+            FileInputStream inputStream = null; --> 이미지 파일을 읽기 위한 Stream 클래스
+            FileOutputStream outputStream = null  --> 읽은 파일을 출력하기 위한 Stream 클래스
+            
+            inputStream = new FileInputStream(fileName); 
+           => inputStream  <----------------> fileName(파일명) --> 스트림과 읽을 파일명 사이에 내부적으로 연결통로(노드)를 통해 읽어온다.
+            outputStream = new FileOutputStream("파일명")
+           => outputStream의 파일명은 읽어드린 파일을 카피해 파일이름을 다시 재정의 
+           => 출력할 파일과 노드 연결
+           
+           byte data[] = new byte[6000] => 해당 이미지 파일을 byte단위로 읽어들여 data 배열에 담아준다.
+           int n = inputStream.read(data) => 읽어들인 이미지 파일의 바이트 수를 반환
+           outputStream.write(data, 0, n); =>  data에 담긴 바이트 수 만큼만 복사한다.
+           
+           inputStream.close(); --> 노드(연결통로 같은 맥락)를 통해 다 읽어들어왔으면 반드시 그 통로를 닫아줘야 된다!!
+           outputStream.close(); --> 비슷한 개념
+                 
+          }
+    
+          public static void main(String[] args) {
+            * 위에서 이미지 파일이나 텍스트 파일들을 읽어드릴 때 발생될 수 있는 예외들을 만약 발생하면 read()를 호출하면 
+              호출 하는 쪽에서 예외처리를 하라고 throws 으로 던졌으므로 이 부분에서 예외처리를 해줘야 한다.
+              만약 계속 예외처리를 하지 않고 계속 throws을 한다면 최종적으로 jvm으로 다시 돌아간다.
+              try{
+                String file = JOptionPane.showInputDialog("이미지 파일명을 입력");
+                if(file == null) return;
+                reading(file); --> 위에 reading 메소드 호출
+               } catch (FileNotFoundException e) {
+                    JOptionPane.showMessageDialog(null, "찾는파일이 없어요" + e);
+               } catch (IOException e){
+                   e.printStack(); 
+               } catch (Exception e){
+                  JOptionPane.showMessageDialog(null, 기타오류 + e);
+               }
+          }
+    }
+    * 사용자 정의 예외 클래스 만들기
+      -> public class NotSupportedNameException extends Exception {
+            => 반드시 Exception 클래스를 상속해야한다.
+            
+            1) 생성자 만들기 
+            public NotSupportedNameException(){
+                2) super() --> 부모 클래스의 기본생성자 명시적으로 호출 
+                super("NotSupportedNameException !!!");
+            }
+            
+            * 메소드 오버로드를 통해 들어오는 인자에 따라 메시지를 다르게 줄 수 있다.!
+            public NotSupportedNameException(String msg){
+                super(msg);
+            }
+
+      }
+      ==> 만든 사용자 정의 예외 클래스 사용하기
+        public class PongApp {
+                                          1) 예외 객체를 사용할 때 throws와 함께 사요
+            public void join (String name) throws new NotSupportedNameException
+            
+            {
+                if (name.charAt(0) == '콩'){
+                    throw new NotSupportedNameException("콩씨는 가입할 수 없어요");
+                } else if (name.charAt(0) == '퐁'){
+                    System.out.println(name + "환영해");
+                } else {
+                     throw new  NotSupportedNameException("기타 성씨는 가입하지 못합니다");
+                }
+            
+            }
+                        
+            public static void main(String[] args) {
+                String name = JOptionPane.showInputDialog("이름을 대시오");
+		            if(name == null) return;
+                PongApp app = new PongApp();
+               try {
+                  app.join(name);  --> throws으로 던진 예외를 선언한 메서드를 호출 했기 때문에 예외처리를 해줘야한다.
+            
+                }catch (NotSupportedNameException e){
+                    e.getMessage() --> public String getMessage()
+                                        NotSupportedNameException 생성자에서 super("")를 메시지를 반환한다.
+                    e.printStackTrace() --> public void printStackTrace() 
+                                         -->  예외가 발생한 지점의 스택 기록을 출력(디버그 용으로 많이 사용)
+                }
+            }
+        
+        }
+      
+    
+    
+    
+     
