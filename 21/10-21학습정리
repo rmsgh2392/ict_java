@@ -1,0 +1,235 @@
+** 오늘 배운 내용 ** 
+1> Inner Class (이너 클래스)
+2> java.awt.event (GUI 이벤트 처리)
+3> Collection Vector , ArrayList
+
+1. Inner class (이너 클래스) :  말 그대로 클래스 안에 클래스가 있는 구성 형태
+=> 이너 클래스에는 클래스가 정의되는 위치에 따라 멤버 이너 클래스, 로컬 이너 클래스가 종류가 있다.
+  1) 멤버 이너 클래스 : 클래스 안에 클래스가 구성되어 있으며 non-staitc 이너 멤버클래스, static 이너 멤버클래스를 정의할 수있다
+      1_ 인스턴스변수 또는 멤버변수 (non-static) 
+      2_ 클래스변수 또는 공유변수 (static) 
+      3_ 멤버메서드 또는 인스턴스 메서드 
+      4_ 스태틱 메서드 등을 선언 또는 정의 할 수 있다.
+    예 ) public class Outer 
+        {
+            int a = 0; //당연히 클래스 안에 인스턴스 변수 선언(o)
+            static int b = 10; 클래스 변수 선언  (o)
+              class Inner // Inner Member class - non static
+              {
+                  int c = 20;
+                  static double d = 10.5;
+                  void foo(){System.out.println("foo~~")}
+              }//Inner
+              static class SInner //Inner Member class - static
+              {
+                int q = 100;
+                static float w = 13.1f;
+                void bar(){System.out.println("bar~~~")}
+                static void barz(){System.out.println("barz !!!!")}
+              }//SInner
+        }//Outer
+     =>  각 이너 클래스들의 변수나 메서드를 호출 하고 싶다면 ? 
+        public class App 
+        {
+            public static void main(String[] args)
+            {
+                //우선 Outer 객체 선언해 a, b값 출력
+                Outer outer = new Outer();
+                System.out.println(outer.a); //a
+                System.out.println(outer.b); //b
+                
+                //Outer클래스 안에 이너 클래스인 Inner클래스에 변수 메소드 출력
+                Outer out = new Outer();
+                Outer.Inner oi = out.new Inner(); // 이너 클래스 객체 생성
+                Outer.Inner oi = new Outer().new Inner() // 일회성 이너클래스 객체 생성
+                System.out.println(oi.c); //c
+                System.out.println(Outer.Inner.d); //d 스태틱 변수 이므로 클래스 이름으로 접근한다.
+                oi.foo();
+                
+                => 보통 클래스는 .java 파일에서 -> 컴파일 후 클래스이름.class 파일로 저장된다.
+                => 하지만 이너 멤버 클래스인 Inner클래스 또는 SInner클래스는 
+                => .java 파일에서 -> Outer클래스 안에 있으므로 -> Outer.Inner$.class/ Outer.SInner$.class 파일로 저장된다. 
+                
+                //Outer클래스 안 static 이너 클래스인 SInner클래스 변수 메소드 출력
+                Outer.SInner os = new Outer.SInner(); //스태틱 이므로 new 생략
+                System.out.prinln(os.q); //q
+                System.out.println(Outer.SInner.w);//스태틱 변수이므로 클래스 이름으로 접근 
+                os.bar(); //bar()
+                Outer.SInner.barz();//static 메소드이므로 클래스 이름으로 접근해 호출
+            } // main
+        }//App
+      
+  2) 로컬 이너 클래스 : 로컬 이너 클래스는 클래스 안에 있는 * 메소드 내부에 클래스를 구성하는 형태
+      => 메소드 내부에 정의 하므로 지역변수와 비슷한 성격을 가지며 클래스의 활용범위가 정의되는 메소드 블럭내부로 제한된다.
+      
+     [1] 이름 있는 로컬 이너 클래스  : 말 그대로 메소드 내부에 있고 클래스 이름이 있는 이너 클래스이다.
+         예) public class Local 
+            {
+                String str = "멤버변수";
+                
+                public void sub()
+                {
+                    int num = 100; //지역변수(로컬변수)
+                    
+                     //LocalInner li = new LocalInner();
+                     //li.demo(); // 만약 이렇게 로컬 이너 클래스가 구성되기 전에 객체를 생성하려고 하면 컴파일 오류가 난다.!!!
+                    
+                    class LocalInner 
+                    {
+                        String lstr = "로컬 이너 클래스 멤버변수";
+                        void demo()
+                        {
+                            System.out.println("----------------------")
+                            System.out.prinln(str); //Local 클래스의 멤버변수
+                            System.out.println(num) // sub() 메소드 지역변수
+                            System.out.println(lstr) // LocalInner 클래스의 멤버변수
+                           ★ 로컬 이너 클래스는(LocalInner) 외부클래스(Local)의 멤버변수와 메서드(sub())의 지역변수
+                              그리고 자기 자신의 멤버변수를 가져가 사용이 가능하다.
+                              자바 7버전 이전에는 로컬 이너클래스에는 final이 아닌 지역변수는 접근이 불가능했다.
+                        }//demo()
+                    }//LocalInner
+                    
+                  ★ sub() 메소드 안에서 객체를 생성해야 한다 
+                     ※ 주의사항 : 반드시 로컬 이너 클래스가 구성된 이후에 생성해야한다.
+                      LocalInner li = new LocalInner();
+                      li.demo();
+                }//sub()
+                  public void test()
+                  {
+                      class LocalInner{}// 같은 이름으로 다른 메소드 내부에 로컬 이너 클래스를 구성할 수 있다.
+                      => 그 이유는 메소드 내부에 있으므로 지역변수와 비슷한 개념으로 로컬 이너 클래스를 내부에 가지고 있는
+                      => 메소드를 호출 하고 나면 지역변수처럼 가비지 컬렉션에 의해 제거되므로 다시 사용할 수 있다.
+                      => 로컬 이너 클래스가 컴파일 되면 저장되는 파일 형식 이름이 다른 자바파일과 다르다.
+                      => LocalInner.java -> LocalClass$숫자 +로컬클래스명.class 파일 형식으로 저장된다.
+                      => 여기서 숫자는 인덱스를 의미하며 서로 다른 메소드인 경우 동일 명칭의 이너 클래스가
+                      => 존재 할 수 있기 때문에 중간에 인덱스 역할의 숫자를 붙여 구분되도록 한다..
+                  }
+                  
+                  public static void main(String[] args)
+                  {
+                      Local local = new Local();
+                      System.out.println("local.str : " + local.str);
+                      
+                      // 로컬 이너 클래스의 demo() 메소드를 호출 하려면
+                      // 로컬 이너 클래스가 정의 되어 있는 메소드를 호출해야 한다.
+                      local.sub(); 
+                      -- 호출을 하더라도 demo()메소드를 호출하지 못한다  그 이유는 인스턴스 메소드이기 때문에 
+                      -- 객체를 생성해서 불러와야된다.
+                      -- 하지만 로컬 이너 클래스는 자기가 속한 메소드 안에서만 객체 생성이 가능하다.!!!!
+                  }
+                  
+            }//Local
+          
+            
+            
+     
+     [2} 이름 없는 로컬 이너 클래스, 익명 클래스 : 말 그대로 이름이 없는 익명 클래스 이고 객체를 생성하는 코드 뒤에, 즉
+          new 객체 바로 뒤 { } 클래스 블럭(body)를 붙여 구성한다. new 객체 { ... }
+          한번만 객체 생성이 가능하며 new 키워드 뒤 생성자의 이름이 기존 클래스 이름일 경우 
+          익명(Anonymous)클래스가 자동으로 기존 클래스의 자식 클래스가 되며 
+          인터페이스일 경우 인터페이스를 상속하는 클래스로서 부모 클래스가 Object이 된다.
+          
+          예 ) JPanel panel = new JPanel () {// JPanel을 상속 받는 이름 없는 클래스(JPanel의 자식클래스가 된다)
+                  * 부모 클래스로 부터 상속을 받고 있으므로 메소드를 오버라이딩 할 수 있다.
+                  @Override
+                  public Insets getInsets(){// JPanel클래스에 있는 getInsets() 메소드를 오버라이딩
+                         return new Insets(20,20,20,20);
+                  }
+              }
+             -> 인터페이스일 경우 
+             ActionListener action = new ActionListener(){
+                  //인터페이스를 구현하는 익명 객체 
+                  //반드시 추상메서드를 오버라이딩 해야된다 !!!
+                  @Override
+	                public void actionPerformed(ActionEvent e) {
+                        //이벤트 처리 
+                  } 
+             }
+        
+   3. Collection 
+      -> Object 유형의 Collection으로서 어떤 유형의 객체도 저장할 수 있다.
+      -> Collection 중 List 계열의 많이 쓰이는 Vector와 ArrayList가 있다.
+      특징 : * 배열과 같은 개념이며 index 번호를 붙여 데이터를 관리한다.
+             * 저장되는 데이터의 순서를 기억한다.
+             * 중복데이터가 들어와도 데이터가 저장이 가능하다 (but Set계열은 중복 값이 있으면 덮어 씌운다)
+             * 배열과는 다르게 데이터 공간이 꽉 차게 되면 동적으로 저장 공간 크기를 늘려 데이터 저장을 가능하게 해준다.
+             ※ 배열은 고정 크기 이므로 저장영역이 넘어가면 인덱스 예외가 발생한다.
+             
+             * Vector 그리고 ArrayList와 같은 Collection은 List 인터페이스를 구현한 클래스이며 사용할 수 있는 메소드가 많이 존재한다.
+               - 데이터 저장 메소드 : add(Object o);
+               - 데이터 불러오기 : Object get(int index), Object elementAt(int index);
+      예 ) 자바 5버전 이전 
+          //Vector 객체 생성
+          Vector v = new Vector();// 따로 크기를 정해주지 않으면 기본 저장공간은 10이며, 저장공간을 넘어서면 공간을 2배로 늘린다.
+          Vector v1 = new Vector(5, 3)// 초기 저장공간을 5로 지정하고, 공간이 넘어서면 3개씩 저장공간을 늘린다.
+          System.out.println(v1.capacity()); //현재 백터의 저장공간 크기
+		      System.out.println(v.size()); //백터안에 담아있는 데이터 개수
+          
+          //데이터 저장
+          v1.add("Hello") //컬렉션에 저장할 때는 반드시 Object유형(참조)만 저장이 가능하고 기본자료형이 불가능하다.
+          v1.add(new Object());//객체타입 저장
+		      v1.add(new Outer());//객체타입 저장
+          v1.add(10);//기본자료형인 int형이 저장되는 것이 아니라 래퍼클래스인 Integer객체로 변환되어 자동 저장된다.
+                     // 타입이 작은 타입에서 큰 타입으로 자동 형번환 되어 저장되는 것을 auti boxing 이라 한다.
+          v1.add(Integer.valueOf(200));
+          System.out.println(v1.capacity()); // 5 
+          System.out.println(v1.size()); // 5
+          v1.add(new String("hi")); 
+          System.out.println(v1.capacity()); // 8 -> 초기에 5만큼의 저장공간이 꽉차면 3개를 늘리므로 8
+          System.out.println(v1.size()); // 6
+          
+          // 데이터 불러오기 - index번호는 0부터 시작
+          Object obj = v1.get(0)
+          
+          ※ 문제점! 
+          Outer out = v1.get(0) --> 백터 인덱스 번호 0번째에 있는 객체를 Outer참조타입의 변수 out에 담고 있다
+          System.out.prinln(out);
+          => 하지만 v1.get(0) 안에 있는 데이터는 String 객체이므로 컴파일 오류가 난다.
+          => 만약 백터 안에 데이터가 천개 만개 있을 경우 객체를 사용하려고 데이터를 불러올 때 어느 객체가 몇 번째 인덱스에 있는지 
+          => 가늠할 수 없으며 함부로 캐스팅 즉 형변환을 했다가는 컴파일 오류가 나는 문제점이 있다.
+          
+          ★ 그러하여 자바 5버전 이후 부터 Generic 클래스를 이용하여 처음부터 컬렉션에 담길 수 있는 데이터 유형을 지정해주어
+             지정해준 데이터 타입의 데이터만 컬렉션에 담을 수 있다.!!
+           예) Vector<String> v2 = new Vector<>(); --> < Generic > : <> 안에는 모든 데이터 유형들이 올 수 있다.
+               => v2 라는 벡터 컬렉션은 String 타입의 데이터만 저장 할 수 있으며 다른 타입으 데이터는 저장 할 수없다.
+               
+               Vector<Float> v3 = new Vector<>();
+               v3.add(Float.valueOf(12.0f));
+               v3.add((float)10.4); --> auto boxing 되어 float타입의 10.4를 자동으로 Float클래스타입으로 변환되어 저장된다.
+               v3.add(Float.valueOf(13.2f));
+               
+               float sum = 0;
+               float avg = 0;
+               for(int i=0; i<v3.size();i++){
+                  System.out.prinln(i + " : " + v3.get(i));
+                  sum += v3.get(i) // auto unboxing -> 변수 sum이 float형이므로 연산시 v3.get()에 담긴 Float형의 데이터를 
+                                                      float형으로 자동 형변환
+                  avg = sum / v3.size();
+               }
+                System.out.println("총 합계 : "+sum);
+		            System.out.println("평균 : " + avg);               
+     
+          
+          * Vector 클래스에 자주 쓰이는 메소드
+              Iterator<E> iterator() // Iterator<E> 인터페이스
+	            Enumeration<E> elements() //Enumeration<E> 인터페이스
+	            void	copyInto(Object[] anArray)
+              
+          ->  Iterator<E> , Enumeration<E> 인터페이스 : 객체들을 집합체로 관리해주는 인터페이스다.
+                이 두 인터페이스에는 각각의 객체들을 한 순간에 하나씩 처리할 수 있는 메소드를 제공해준다.
+                (논리적 커서가 존재하여 커서를 이동하면서 데이터를 꺼내올 수 있다.)
+                논리적 커서는 컬렉션의 첫번째 요소 직전에 위치한다.
+                
+              1) Enumeration 주요 메서드 
+                   - boolean hasMoreElements() : 논리적 커서가 위치하는 곳 이후에 요소들이 있는지 없는지 여부를 묻는 메소드
+                            요소들이 있으면 true를 반환한다. 없으면 false
+                   - E nextElement() : 논리적 커서를 다음으로 이동시키고 커서가 가리키고 있는 지점의 요소를 반환한다.
+                   
+              2) Iterator 주요 메서드 Enumeration 와 같은 개념
+                    - boolean hasNext()
+                    - E next()
+                    
+             예) Enumeration<Person> en = v.elements();
+                 while(en.hasMoreElements()){
+                      Person p = en.nextElement() //논리적 커서가 nextElement를 만나면 커서를 이동시켜 가리키고 있는 요소를 반환
+                 }
