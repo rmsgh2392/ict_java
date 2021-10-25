@@ -1,0 +1,126 @@
+*************************************************
+1) LinkedList 
+2) HashSet
+3) jdbc 연결
+*************************************************
+1. LinkedList : ArrayList 자료구조 클래스는 순차적으로 데이터를 저장할 때 적합하며 LinkedList는 데이터를 *저장 후*에
+      수시로 객체를 삽입, 수정해야 할 경우 적합하다. LinkedList는 각 참조객체들을 링크해서 체인처럼 연결한다.
+                        객체
+                         |
+      예 ) 객체 --- 객체 --- 객체 --- 객체 ...
+                        이 부분의 체인사이에 새로 들어온 객체를 삽입해 다시 체인을 연결한다.
+     
+     *      순차적으로        추가/삭제        중간에 추가/삭제          검색
+ArrayList   빠름                느림              늬림                  빠름
+LinkedList  느림                빠름              빠름                  느림
+
+********************************************************
+2. HashSet : 컬렉션 Set 계열 인터페이스를 구현한 클래스이다. 중복된 요소(값, 데이터)들이 저장되는 것을 방지한다.!
+              ArrayList와 다르게 순서가 없다 
+          
+    * HashSet은 값의 중복을 체크할때 내부적으로 클래스가 가지고 있는 hashCode()메소드와 equal()메소드를 이용해 체크한다.
+      HashSet set = new HashSet();
+      set.add("Hello")
+      set.add("Hello")
+      set.add(999) 
+      set.add(999)
+      set.add(999)
+      
+      set.add(new MyClass("Jack", 99));
+      set.add(new MyClass("Jack", 99));
+        
+      System.out.prinln(set)
+      // 결과 : Hello, 999, ["Jack", 99]  ,["Jack", 99]
+      => 분명히 HashSet은 값의 중복을 허용하지 않는다 결과를 보시다시피 String, Integer타입의 데이터들은 중복 값을 제거하고
+         출력이 되었고 클래스의 인스턴스의 경우 중복 값을 제거하지 못한 채 출력되었다.
+       -> 그 이유는 객체가 메모리 상에서 참조가 될 때를 생각해보면 각 객체는 메모리 상에서 주소를 가지고 독립적으로 존재한다.
+       
+     예) String a = "Hello"
+         String b = "Hello"
+         String c = "Hello"
+        System.out.println("Hello".hashCode()); //69609650
+        System.out.println(a.hashCode()); //69609650
+        System.out.println(b.hashCode());//69609650
+        System.out.println(c.hashCode());//69609650
+        
+        System.out.println(a.equals("Hello")); //true
+        System.out.println(a.equals(b));//true
+        System.out.println(b.equals(c));//true
+        System.out.println(c.equals(a));//true
+        => 쉽게 말해서 자바는 객체들을 비교할 때 해쉬코드를 읽어 equal() 메서드를 이용해 비교한다!!
+        * hashCode : 자바에서 메모리와 클래스를 관리하는 고유의 주소체계라고 볼 수 있다.
+            HashSet<Member> mem = new HashSet<>();
+            mem.add(new Member("홍길동" , 23));
+		        mem.add(new Member("카리나" , 33));
+            System.out.println(mem);
+            //결과 day06.Member@ [hashCode :33a43c7 ], day06.Member@33a43c5, day06.Member@31e2e01]
+            // @이 뒤에 나온 16진수로 나온 값들이 각 클래스들의 인스턴스가 가지고 있는 hasgCode이다.
+           //위에 처럼 기본형은 비교가 가능하지만 인스턴스를 생성하면 각각 다른 해쉬코드가 생성되므로 이런 경우
+           // 생성하는 객체의 클래스에서 equal(), hashCode() 메소드를 오버라이드 해주어 중복 값을 방지한다.
+            
+  ******************************************************
+  3. jdbc(Java Database Connectivity) 연결 : 자바에서 데이터베이스에 접속 할 수 있도록 하는 자바API 또는 라이브러리이며
+     자바와 데이터베이스를 연결해 데이터를 주고 받을 수 있게 해주는 프로그래밍 인터페이스다.
+     또한 자바와 데이터베이스 사이에서 통역자 역활을 한다 
+  
+    * java.sql.Package
+      
+      1) java.sql.Connection
+         특정 데이터베이스(ORACLE, Mysql, db2등등)와 연결정보(url, userid, password)를 가지는 interface
+         DriverManager로 부터 Connection객체를 가져오고 getConnection()메소드를 이용해 데이터베이스와 연결
+         => Connection conn = DriverManager.getConnection();
+      2) java.sql.statement
+         SQL쿼리문을 DB에 전송하는 방법을 정의한 interface
+         Connection을 통해 가져온다.
+         => Statement stmt = conn.createStatement();//stmt 객체 가져오기
+         => String sql = "INSERT INTO MEMO(IDX, NAME, MSG, WDATE)"
+					+ "VALUES(MEMO_SEQ.NEXTVAL, '카리나', '사랑스러워', SYSDATE)"; // sql구문
+        실행 => boolean bool = stmt.execute(sql); //sql구문 실행을 위한 statement클래스의 boolean 타입의 execute()실행
+     3) java.sql.ResultSet 
+        데이터베이스에서 SELECT 구문의 결과를 조회 할수 있는 방법을 정의한 interface
+        
+        
+   * JDBC 개발 단계
+     [1] JDBC Driver Loading
+         데이터베이스 벤더(제품)에 맞는 드라이버를 호출//벤더 : ex) oracle, mysql, db2...
+         데이터베이스와의 연결을 위해 드라이버를 로딩 // Class 클래스에 forName() 메서드를 이용
+         -> Class.forName(드라이버종류)
+     |
+     |
+     |
+     v
+     [2] Connection
+          DB와 연결을 위한 URL과 DB설치시 만들었던 유저계정 정보가 필요
+          연결 메소드로는 DriverManager.getConnection(url, id, pwd) => Connection
+     |
+     |
+     |
+     v
+     [3] Statement/Preparedstatement
+          sql구문을 정의하고 쿼리전송 전에 값을 setting 한다.
+     |
+     |
+     |
+     v
+     [4] executeUpdate() or executeQuery()
+        executeUpdate() : sql 쿼리문이 INSERT, DELETE, UPDATE경우에 사용
+        executeQuery() : SQL쿼리문이 SELECT 경우에 사용 반환 값 존재 타입은 ResultSet!!
+     |
+     |
+     |
+     v
+     [5] ResultSet
+          데이터베이스 조회 결과집합 대한 표준
+          next() 메소드를 통해 db의 table안의 row한줄을 불러온다.
+          getString(), getInt() 메소드를 통해 한 행의 특정 Column 값을 가져온다.
+     |
+     |
+     |
+     v
+     [6] close()
+        Connection, statement, ResultSet에 대해 close를 해준다.(반드시 필요)
+          
+        
+      
+  
+         
