@@ -1,0 +1,13 @@
+MVC 패턴
+Model : 데이터를 가지고 있는
+View : 화면을 구성하는
+Controller : Model 과 View사이에서 제어하는
+-----------------------------------------------------------------
+[1] Model : DeptVo, empVo (Value Object) : 도메인 객체 , 값을 담는 객체
+	DeptDAO, EmpDao (Data access Object) 
+                 : 데이터베이스에 접근해서 비즈니스 로직(CRUD)를 수행하는 객체 jdbc로직을갖는다.
+
+[2] View : ICTMainFrame, DeptPanel, EmpPanel
+             화면계층 / UI 계층 / Presentation Tier;
+
+[3] Controller : DeptHandler, EmpHandler
