@@ -1,0 +1,17 @@
+
+서블릿 생성주기..또만들어지면 쓰레드로 처리한다.
+처음 방문자가 요청을 하면-->
+맨처음 생성자가(서블릿객체 딱한번 생성) 호출 --> init()수행(초기화수행)
+--> service()수행(jsp나 서블릿은 쓰레드 기반으로 돌아간다.) 
+
+
+=====================
+이클립에서 서블릿이 생성되는 경로
+C:\eclipse\WebWorkSpace\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\work\Catalina\localhost\MyWeb\org\apache\jsp\example
+
+------------------------
+include지시어 : 해당 소스코드를 가져와서 포함(삽입)시키는 방식
+
+include액션 : 소스를 포함시키는 방식이 아니라 실행 결과를 포함시키는 
+방식
+<jsp:include page="ex04.jsp"></jsp:include>

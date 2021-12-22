@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<!-- saved from url=(0058)http://127.0.0.1:5500/ex14%EC%8B%A4%EC%8A%B5%ED%8F%BC.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./박근호_files/style">
+    <style>
+        .text {
+            background-color: tomato;
+            text-align: right;
+        }
+        .info {
+            background-color: aqua;
+        }
+        span {
+            color : purple;
+        }
+        .small_text {
+            width: 70px;
+        }
+        div {
+            text-align: center;
+        }
+        button {
+            background-color: green;
+            border : 1px solid purple;
+            border-top-left-radius: 7px;
+            border-bottom-left-radius: 7px;
+            border-top-right-radius: 7px;
+            border-bottom-right-radius: 7px;
+        }
+        button:hover{
+            background-color: red;
+            color:wheat;
+        }
+    </style>
+    <title>ex14실습폼.html</title>
+    <!--    <button name="confirm">확인</button>
+        <button name="reset_input" type="reset">다시 입력</button>-->
+</head>
+<body>
+    <form name="join" action="http://127.0.0.1:5500/join.jsp">
+        <table width="70%" cellspacing="1">
+                <tbody><tr class="info">
+                    <th colspan="2" align="left">☞아이디(ID)정보</th>        
+                </tr>
+                <tr>
+                    <td class="text">* 아이디</td>
+                    <td>
+                        <input type="text" name="userid">
+                        <button>중복검사</button><br>                        
+                        <span>(4~12자 영자/숫자 가능,한글,특수문자 ID는 사용할 수 없습니다.)</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text">* 비밀번호</td>
+                    <td>
+                        <input type="password" name="pwd">
+                        <span>(4~8자 이내로 만들어 주세요)</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text">* 비밀번호 확인</td>
+                    <td>
+                        <input type="text" name="confirmPwd">
+                        <span>(위 번호와 같이 입력해주세요)</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text">* 본인확인 질문</td>
+                    <td>
+                        <select name="question" id="">
+                            <option value="">질문을 선택하세요</option>
+                            <option value="">본인 초등학교 이름은 ?</option>
+                            <option value="">가장 기억에 남는 장소는 ?</option>
+                            <option value="">즐겨듣던 노래이름은 ?</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text">* 본인확인 답</td>
+                    <td>
+                        <input type="text" name="question_result">
+                        <span>(비밀번호 분실, 변경시 본인확인을 위한 정보)</span>
+                    </td>
+                </tr>
+                <tr class="info"><th colspan="2" align="left">☞개인정보</th></tr>
+                <tr>
+                   <td class="text">* 이름(한글)</td>
+                   <td>
+                       <input type="text" name="user_name">
+                       <span>(예:박정현)</span>
+                   </td> 
+                </tr>
+                <tr>
+                    <td class="text">성별</td>
+                    <td>
+                        <label>
+                            <input type="radio" name="gender" value="male">남
+                        </label>
+                        <label>
+                            <input type="radio" name="gender" value="Female">여
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text">생년월일</td>
+                    <td>
+                        <input type="text" name="birth">년
+                        <select name="month" id="">
+                            <option value="octo">10</option>
+                            <option value="nov">11</option>
+                            <option value="dec">12</option>      
+                        </select>월
+                        <select name="day" id="">
+                            <option value="">20</option>
+                            <option value="">22</option>
+                            <option value="">23</option>
+                        </select>일
+                        <label>
+                            <input type="radio" name="year" id="">음력
+                        </label>
+                        <label>
+                            <input type="radio" name="year" id="">양력
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text">* 주소</td>
+                    <td>
+                        <input type="text" name="adress">
+                        <button name="search">우편번호 찾기</button><br>
+                        <input type="text" style="width:70%">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text">* 전화번호</td>
+                    <td>
+                        <span style="color:pink">핸드폰</span>
+                        <input type="text" class="small_text">-
+                        <input type="text" class="small_text">-
+                        <input type="text" class="small_text">
+                        <label for="">
+                            <input type="radio" name="agency">SKT
+                        </label>
+                        <label for="">
+                            <input type="radio" name="agency">KTF
+                        </label>
+                        <label for="">
+                            <input type="radio" name="agency">LGT
+                        </label><br>
+                        <span style="color:pink">집/회사</span>
+                        <input type="text" class="small_text">-
+                        <input type="text" class="small_text">-
+                        <input type="text" class="small_text">
+                        <span>최소 한개는 입력하세요</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text">* 직업</td>
+                    <td>
+                        <select name="job" id="">
+                            <option value="">직업을 선택하세요</option>
+                            <option value="Developer">개발자</option>
+                            <option value="Designer">디자이너</option>
+                            <option value="hairdresser">미용사</option>
+                            <option value="student">학생</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text">이메일</td>
+                    <td><input type="text" name="email" style="width:30%;height:20px"></td>
+                </tr>
+                <tr>
+                    <td class="text">메일수신</td>
+                    <td>
+                        <label>
+                            <input type="radio" name="agree">받습니다.
+                        </label>
+                        <label>
+                            <input type="radio" name="agree">받지 않습니다.
+                        </label>
+                        <span>다양하고 유익한 정보, 메일로 받아보세요</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text">SMS수신</td>
+                    <td>
+                        <label>
+                            <input type="radio" name="sms">받습니다.
+                        </label>
+                        <label>
+                            <input type="radio" name="sms" id="">받지 않습니다.
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text">가입인사</td>
+                    <td>
+                        <textarea name="intro" id="" cols="50" rows="7"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center">
+                        <button name="confirm">확인</button>
+                        <button name="reset_input" type="reset">다시 입력</button>
+                    </td>
+                </tr>
+        </tbody></table>
+    </form>
+<!-- Code injected by live-server -->
+<script type="text/javascript">
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body></html>

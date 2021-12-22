@@ -1,0 +1,95 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+ 
+<!doctype html>
+<html>
+<head><title>::성적 계산::</title> 
+<link rel="stylesheet" type="text/html" >
+<script type="text/javascript">
+
+<%
+
+ String num=request.getParameter("num");
+ String jav=request.getParameter("java");
+ String db=request.getParameter("db");
+ String jsp=request.getParameter("jsp");
+ out.println("학번 : "+num+", java="+jav+", db="+db+", jsp="+jsp);
+ 
+ 
+  if(num==null||jav==null||db==null||jsp==null){
+  
+   %>
+   
+   <script type="text/javascript">
+    alert('경로를 잘못들어오셨습니다.');
+    location.href='input.jsp';
+  
+   </script>
+   <%
+   return;
+  }
+  
+  
+  if(jav.trim().isEmpty()){
+   jav="0";
+  }
+  if(db.trim().isEmpty()){
+   db="0";
+  }
+  if(jsp.trim().isEmpty()){
+   jsp="0";
+  }
+  
+  int javInt=Integer.parseInt(jav.trim());
+  int dbInt=Integer.parseInt(db.trim());
+  int jspInt=Integer.parseInt(jsp.trim());
+  
+  int sum=javInt+dbInt+jspInt;
+  double avg=(double)sum/3.0;
+
+ %>
+
+ <br> sum: <%=sum %>
+ <br> avg: <%=avg %>
+</script>
+
+ <table border='1'>
+    <tr>
+     <td colspan="2">학번</td>
+     <td>
+     <b><%=num%></b>
+     </td>
+    </tr>
+    <tr>
+     <td rowspan="3">과목</td>
+     <td>Java</td>
+     <td>
+     <b><%=javInt%></b>
+     </td>
+    </tr>
+    <tr>
+     <td>Database</td>
+     <td>
+     <b><%=dbInt%></b>
+     </td>
+    </tr>
+    <tr>
+     <td>JSP</td>
+     <td>
+     <b><%=jspInt %></b>
+     </td>
+    </tr>
+    <tr>
+     <td colspan="2">평균점수</td>
+     <td style="color:red">
+     <b><%=avg%></b>
+     </td>
+    </tr>
+    <tr>
+     <td colspan="3">
+      <button type="button" onclick="history.back()">입력화면</button>
+     </td>
+    </tr>
+   </table>
+   </html>

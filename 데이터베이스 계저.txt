@@ -1,0 +1,13 @@
+
+사용자 계정 설정
+SQL> conn /as sysdba연결되었습니다.
+SQL> show userUSER은 "SYS"입니다
+SQL> create user ex identified by pass default tablespace users;사용자가 생성되었습니다.
+SQL> grant connect, resource to ex;권한이 부여되었습니다.
+
+그다음 로그인 
+conn ex/pass
+
+실행 
+@ c:\실행할 스크립트파일
+
