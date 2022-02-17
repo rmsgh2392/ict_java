@@ -1,0 +1,107 @@
+«¡∑Œ¡ß∆Æ ª˝º∫»ƒ ∏’¿˙ √º≈©«ÿæﬂµ… ∞Õ
+
+1. pom.xml ºˆ¡§
+
+2. web.xml (web-inf/web.xml) \
+================================
+oracle jdbc µÂ∂Û¿Ãπˆ
+mybatis ∂Û¿Ã∫Í∑Ø∏Æ
+lombok ∂Û¿Ã∫Í∑Ø∏Æ
+commons-dbcp2 ∂Û¿Ã∫Í∑Ø∏Æ
+∆ƒ¿œæ˜∑ŒµÂ ∂Û¿Ã∫Í∑Ø∏Æ commons-fileupload commons-io
+
+=======================
+@controller
+
+@service
+
+@repository
+
+function check(e){
+	e.preventDefault()
+	if(!isUserId(joinF.userid)){
+		alert('æ∆¿Ãµ æÁΩƒ¿Ã æ∆¥’¥œ¥Ÿ.');
+		joinF.userid.select();
+		return false;
+	}	
+	/*if(!isName(joinF.name)){
+		alert('¿Ã∏ß  æÁΩƒ¿Ã æ∆¥’¥œ¥Ÿ.');
+		joinF.name.select();
+		return false;
+	}
+	if(!isPhone(joinF.phone)){
+		alert('»ﬁ¥Î∆˘ æÁΩƒø° ∏¬∞‘ ¿˚æÓ¡÷ººø‰')
+		joinF.phone.select();
+		return false;
+	}
+	if(!isUserPwd(joinF.pwd)||joinF.pwd.length >= 6){
+		alert('∫Òπ–π¯»£ æÁΩƒ¿Ã æ∆¥’¥œ¥Ÿ')
+		errorStyle();
+		return false;
+	} else if(isUserPwd(joinF.pwd)||joinF.pwd.length >= 6){
+		okStyle();
+		return false;
+	}
+	if(joinF.pwd != joinF.pwd2){
+		errorStyle();
+		document.querySelector('#pwdCheck2').innerText = '∫Òπ–π¯»£∞° ¿œƒ°«œ¡ˆ æ Ω¿¥œ¥Ÿ'
+		document.querySelector('#pwdCheck2').style.color = 'red'
+		return false;
+	}*/
+}
+
+$('#uid').keyup(()=>{
+	if($('#uid').val().length >= 5){
+		$('#id_check').text('¿ÃπÃ¡∏¿Á«‘').css('color','red')
+	}
+})
+/*function idCheck(){
+	alert('zzz')
+}*/
+/*
+ ∫Òπ–π¯»£ √º≈© Ω∫≈∏¿œ º”º∫
+*/
+function errorStyle(){
+	if(document.querySelector('#pwdCheck').style.display === 'none'
+	  ||document.querySelector('#pwdCheck').style.display === 'block'){
+		document.querySelector('#pwdCheck').style.display = 'block'
+		document.querySelector('#pwdCheck').style.backgroundImage = 'url(./img/x.svg)'
+		document.querySelector('#pwdCheck').style.backgroundRepeat='no-repeat';
+		joinF.pwd.style.border = '1px solid tomato';
+	}
+}
+function okStyle(){
+	if(document.querySelector('#pwdCheck').style.display === 'block'){
+		document.querySelector('#pwdCheck').style.backgroundImage = 'url(./img/o.svg)'
+		document.querySelector('#pwdCheck').style.backgroundRepeat='no-repeat';
+		joinF.pwd.style.border = '1px solid blue';
+	}
+}
+
+function isUserId(param){
+	let val = param.value;
+	let pattern = /^([A-Za-z])[A-Za-z0-9!@#]{3,7}$/;
+	let b = pattern.test(val);
+	return b;
+}
+function isName(param){
+	let val = param.value;
+	let pattern = /^[∞°-∆R\s]+$/;
+	let b = pattern.test(val);
+	return b;
+}
+
+function isPhone(param){
+	let val = param.value;
+	let pattern = /\b(010|011)[\d]{3,4}[\d]{4}\b/;
+	let b = pattern.test(val);
+	return b;
+}
+function isUserPwd(param){
+	let val = param.value;
+	let pattern = /^[A-Za-z]{1}[\w!@#]{5,11}$/
+	let b = pattern.test(val);
+	return b
+}
+
+
