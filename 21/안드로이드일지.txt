@@ -1,0 +1,162 @@
+애니메이션 효과 , 다른화면으로 전환
+package com.example.mylinearlayout;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.media.Image;
+import android.os.Bundle;
+import android.text.Editable;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+
+    ImageButton introIcon;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.intro);
+
+        introIcon = (ImageButton) findViewById(R.id.introlcon);
+
+        //투명 애니메이션 적용
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.tween);
+        introIcon.startAnimation(animation);
+        introIcon.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MainActivity.this, "어서와 쇼핑몰은 처음이지?", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, SubActivity.class);
+                MainActivity.this.startActivity(intent);
+            }
+        },4000);
+
+    }
+    public void changeActivity(View view){
+        Toast.makeText(this, "어서와 쇼핑몰은 처음이지?", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(MainActivity.this, SubActivity.class);
+        this.startActivity(intent);
+    }
+
+}========================================
+package com.example.mylinearlayout;
+
+import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class SubActivity extends AppCompatActivity {
+
+    @Override
+    public void onCreate(Bundle bundle){
+        super.onCreate(bundle);
+        setContentView(R.layout.activity_main);
+    }
+}
+==========================================SubActivity.xml
+<?xml version ="1.0" encoding ="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 투명 애니메이션   -->
+    <alpha android:fromAlpha="0.0" android:toAlpha="1.0" android:duration="4000"
+        android:interpolator="@android:anim/accelerate_interpolator"/>
+
+    <!-- 확대 애니메이션   -->
+    <scale android:fromXScale="0.0" android:toXScale="1.0"
+        android:fromYScale="0.0" android:toYScale="1.0"
+        android:pivotX="50%" android:pivotY="50%"
+        android:startOffset="2000" android:duration="2000"/>
+</set>
+========================================= tween.xml
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.mylinearlayout">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/t02"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SubActivity"
+            android:exported="true" />
+    </application>
+
+</manifest>
+=====================================================andriodMainfest.xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageButton
+        android:id="@+id/introlcon"
+        android:background="#00000000"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:onClick="changeActivity"
+        android:src="@drawable/intro2" />
+
+    <TextView
+        android:id="@+id/txtView"
+        android:text="근호 몰"
+        android:textColor="@color/material_dynamic_neutral20"
+        android:layout_width="wrap_content"
+        android:textSize="18sp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/introlcon"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cloud Co Ltd\nwww.rmsghMall.com"
+        android:textColor="@color/cardview_shadow_start_color"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        />
+
+
+</RelativeLayout>
+===================================intro.xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/intro3"
+    android:padding="16dp"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+
+</LinearLayout>
+=====================================activity_main.xml

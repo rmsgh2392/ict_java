@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/intro3"
+    android:padding="16dp"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_weight="0"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/btn_tab1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="7dp"
+            android:background="#00000000"
+            android:onClick="onButtonClick1"
+            android:src="@drawable/t00"
+            android:tooltipText="@string/memo_title" />
+
+        <ImageButton
+            android:id="@+id/btn_tab2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00000000"
+            android:onClick="onButtonClick2"
+            android:src="@drawable/t06"
+            android:tooltipText="@string/btn_tab2" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+     >
+<!--        <ImageView-->
+<!--            android:id="@+id/imgView1"-->
+<!--            android:visibility="visible"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:src="@drawable/mainbg3"/>-->
+<!--        <ImageView-->
+<!--            android:id="@+id/imgView2"-->
+<!--            android:visibility="invisible"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:src="@drawable/intro2"/>-->
+    </FrameLayout>
+</LinearLayout>
+
+================================================
+package com.example.mylinearlayout;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.text.Editable;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+
+    ImageView imgView1;
+    ImageView imgView2;
+    int index = 0;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        imgView1 = (ImageView) findViewById(R.id.imgView1);
+        imgView2 = (ImageView) findViewById(R.id.imgView2);
+    }
+    public void onButtonClick1(View v){
+        Toast.makeText(this,"∏ﬁ∏¿Â", Toast.LENGTH_SHORT).show();
+        changeView();
+    }
+    public void onButtonClick2(View v){
+        Toast.makeText(this,"ºÓ«Œ∏Ù", Toast.LENGTH_SHORT).show();
+        changeView();
+
+    }
+    public void changeView(){
+        imgView1.setVisibility(View.INVISIBLE);
+        imgView2.setVisibility(View.INVISIBLE);
+        if(index ==0){
+            imgView1.setVisibility(View.VISIBLE);
+            index = 1;
+        } else if (index ==1){
+            imgView2.setVisibility(View.VISIBLE);
+            index = 0;
+        }
+    }
+}
