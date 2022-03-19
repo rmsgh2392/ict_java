@@ -1,0 +1,35 @@
+#게시판 페이징 처리 방법
+1. 전체 게시글 수 알아내기 : 가령 100개, 101
+2. 한 페이지 당 몇개의 게시글을 보여줄 것인지정하자: 한페이지당 10개
+3.페이지 수 연산하기 : 10페이지, 11페이지
+4.jsp페이지에 페이지 네비게이션 만들기
+ ==> 링크걸어주기
+  <a href="list.ict?cpage=1">[1]</a>
+  <a href="list.ict?cpage=2">[2]</a>
+------------------------------------------------------------ sql
+5. xxAction 에서 cpage파라미터 값을 받아서 db에서 
+  끊어올 시작 값(start), 끝 값(end)을 연산해서 구한다.
+6.db sql문을 이용해 해당페이지의 데이터만 추출해서 가져온다.
+select * from (
+    select rownum rn, a.* 
+    from jsp_board_view a
+) 
+where rn between 1 and 10
+
+----------------------------------------
+currPage     pageSize       start     end
+1                 10                1         10
+2                 10                11       20
+3                 10                21       30
+4                 10                31       40
+
+end = currPage * pagSize
+start = end - 9 (pageSize -1)
+----------------------------------------
+
+--인라인 뷰  from절에 오는 subquery를 inline-view라고 한다.
+
+select * from(select  rownum rn, a.*  
+                   from(select memo.*  from memo order by idx desc) a
+                  )
+where rn   between '1' and '5'
